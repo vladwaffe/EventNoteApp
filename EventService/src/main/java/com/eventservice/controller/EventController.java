@@ -35,15 +35,15 @@ public class EventController {
 
     @PostMapping
     @Operation(summary = "Создание события", description = "Позволяет создать новое событие")
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO book) {
-            EventDTO savedBook = eventService.saveEvent(book);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
+            EventDTO savedEvent = eventService.saveEvent(eventDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     @Operation(summary = "Метод удаления события")
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") Long id) {
-            eventService.deleteById(id);
+    public ResponseEntity<Void> deleteEvent(@RequestBody EventDTO eventDTO) {
+            eventService.deleteById(eventDTO);
             return ResponseEntity.noContent().build();
     }
 

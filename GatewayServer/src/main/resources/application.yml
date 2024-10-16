@@ -1,0 +1,52 @@
+spring:
+ cloud:
+   gateway:
+     routes:
+       - id: event-service
+         uri: lb://EVENTSERVICE
+         predicates:
+           - Path=/events
+         filters:
+           - AuthenticationFilter
+       - id: event-service1
+         uri: lb://EVENTSERVICE
+         predicates:
+           - Path=/events/**
+         filters:
+           - AuthenticationFilter
+
+       - id: tag-service
+         uri: lb://TAGSERVICE
+         predicates:
+           - Path=/tag/**
+           - Path=/tag
+         filters:
+           - AuthenticationFilter
+
+       - id: book-service
+         uri: lb://BOOKTESTAPI
+         predicates:
+           - Path=/books
+         filters:
+           - AuthenticationFilter
+
+       - id: book-service1
+         uri: lb://BOOKTESTAPI
+         predicates:
+           - Path=/books/**
+         filters:
+           - AuthenticationFilter
+
+
+       - id: identity-service
+         uri: lb://IDENTITY-SERVICE
+         predicates:
+           - Path=/auth/**
+
+ application:
+   name: SWIGGY-GATEWAY
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/

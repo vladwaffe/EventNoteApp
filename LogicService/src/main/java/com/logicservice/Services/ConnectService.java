@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class ConnectService {
     private final RestTemplate restTemplate;
-    private final String GET_EVENT_LIST = "http://eventservice:8080/event";
+    private final String GET_EVENT_LIST = "http://eventservice:8081/event";
 
 
     @Autowired

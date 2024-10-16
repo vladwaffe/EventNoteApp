@@ -42,6 +42,7 @@ public class EventService {
                 return null;
             } else {
                 EventDTO eventDTO = EventMapper.INSTANCE.eventToEventDTO(event);
+                eventDTO.setTags(connectService.getTagList(eventDTO.getId()));
                 return eventDTO;
             }
         } catch (Exception e) {
@@ -94,17 +95,17 @@ public class EventService {
         }
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(EventDTO eventDTO) {
         Session session = null;
         try {
             session = HibernateUtils.startSession();
-            Event book = session.get(Event.class, id);
-            if(book==null){
-                throw new EventNotFoundException("Ивент не найдена: " + id);
+            Event event = session.get(Event.class, eventDTO.getId());
+            if(event==null){
+                throw new EventNotFoundException("Ивент не найдена: " + eventDTO.getId());
             }
             else {
                 session.beginTransaction();
-                session.remove(book);
+                session.remove(event);
                 session.getTransaction().commit();
             }
         } catch (Exception e) {

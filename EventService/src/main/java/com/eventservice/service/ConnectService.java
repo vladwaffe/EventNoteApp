@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 public class ConnectService {
     private final RestTemplate restTemplate;
-    private final String GET_TAG_LIST = "http://tagservice:8081/tag/";
-    private final String ADD_TAG_LIST = "http://tagservice:8081/tag/";
+    private final String GET_TAG_LIST = "http://tagservice:8082/tag/";
+    private final String ADD_TAG_LIST = "http://tagservice:8082/tag/";
 
 
     @Autowired
