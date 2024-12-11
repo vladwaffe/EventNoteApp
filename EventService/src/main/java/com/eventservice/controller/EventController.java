@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/event")
 @Tag(name = "Events", description = "Взаимодействие с событиями")
 public class EventController {
 
@@ -26,29 +26,23 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping
-    @Operation(summary = "Получение всех событий")
-    public ResponseEntity<List<EventDTO>> findAll() {
-            List<EventDTO> events = eventService.findAll();
-            return ResponseEntity.ok(events);
-    }
-
-    @PostMapping
+    @PostMapping("/add")
     @Operation(summary = "Создание события", description = "Позволяет создать новое событие")
     public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
             EventDTO savedEvent = eventService.saveEvent(eventDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
-    @DeleteMapping()
+
+    @DeleteMapping("/delete/{id}")
     @Operation(summary = "Метод удаления события")
-    public ResponseEntity<Void> deleteEvent(@RequestBody EventDTO eventDTO) {
-            eventService.deleteById(eventDTO);
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+            eventService.deleteById(id);
             return ResponseEntity.noContent().build();
     }
 
 
-    @PutMapping()
+    @PutMapping("/edit")
     @Operation(summary = "Сохранение изменений данных о событии")
     public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDTO) {
         EventDTO updatedEvent = eventService.updateEvent(eventDTO);

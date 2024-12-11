@@ -60,6 +60,7 @@ public class EventService {
             session.persist(event);
             session.getTransaction().commit();
             connectService.addTagList(event.getId(),eventDTO.getTags());
+            eventDTO.setId(event.getId());
         } catch (Exception e) {
             logger.error("Error in saveBook: ", e);
             if (session != null) {
@@ -95,13 +96,13 @@ public class EventService {
         }
     }
 
-    public void deleteById(EventDTO eventDTO) {
+    public void deleteById(Long id) {
         Session session = null;
         try {
             session = HibernateUtils.startSession();
-            Event event = session.get(Event.class, eventDTO.getId());
+            Event event = session.get(Event.class, id);
             if(event==null){
-                throw new EventNotFoundException("Ивент не найдена: " + eventDTO.getId());
+                throw new EventNotFoundException("Ивент не найдена: " + id);
             }
             else {
                 session.beginTransaction();

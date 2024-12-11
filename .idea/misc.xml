@@ -16,11 +16,14 @@
         <option value="$PROJECT_DIR$/identity-service/pom.xml" />
         <option value="$PROJECT_DIR$/GatewayServer/pom.xml" />
         <option value="$PROJECT_DIR$/BookTestApi/pom.xml" />
+        <option value="$PROJECT_DIR$/TestCors/pom.xml" />
+        <option value="$PROJECT_DIR$/ImageService/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/GatewayService/pom.xml" />
+        <option value="$PROJECT_DIR$/TestCors/pom.xml" />
       </set>
     </option>
   </component>

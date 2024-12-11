@@ -15,5 +15,6 @@ public class EventDTO {
     private Timestamp startTime;
     private Timestamp endTime;
     private List<TagEnum> tags;
+    private String imageUrl;
 
 }

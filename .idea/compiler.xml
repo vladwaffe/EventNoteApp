@@ -14,11 +14,13 @@
         <module name="EventService" />
         <module name="GatewayServer" />
         <module name="identity-service" />
+        <module name="ImageService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="SpringSecurity" target="17" />
       <module name="swiggy-gateway" target="17" />
+      <module name="TestCors" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -27,9 +29,11 @@
       <module name="EurekaService" options="-parameters" />
       <module name="EventService" options="-parameters" />
       <module name="GatewayServer" options="-parameters" />
+      <module name="ImageService" options="-parameters" />
       <module name="LogicService" options="-parameters" />
       <module name="SpringSecurity" options="-parameters" />
       <module name="TagService" options="-parameters" />
+      <module name="TestCors" options="-parameters" />
       <module name="identity-service" options="-parameters" />
       <module name="swiggy-gateway" options="-parameters" />
     </option>

@@ -1,50 +1,40 @@
 spring:
- cloud:
-   gateway:
-     routes:
-       - id: event-service
-         uri: lb://EVENTSERVICE
-         predicates:
-           - Path=/events
-         filters:
-           - AuthenticationFilter
-       - id: event-service1
-         uri: lb://EVENTSERVICE
-         predicates:
-           - Path=/events/**
-         filters:
-           - AuthenticationFilter
-
-       - id: tag-service
-         uri: lb://TAGSERVICE
-         predicates:
-           - Path=/tag/**
-           - Path=/tag
-         filters:
-           - AuthenticationFilter
-
-       - id: book-service
-         uri: lb://BOOKTESTAPI
-         predicates:
-           - Path=/books
-         filters:
-           - AuthenticationFilter
-
-       - id: book-service1
-         uri: lb://BOOKTESTAPI
-         predicates:
-           - Path=/books/**
-         filters:
-           - AuthenticationFilter
+  cloud:
+    gateway:
+      routes:
+        - id: image-service
+          uri: lb://EVENTSERVICE
+          predicates:
+            - Path=/images/**
 
 
-       - id: identity-service
-         uri: lb://IDENTITY-SERVICE
-         predicates:
-           - Path=/auth/**
+        - id: event-service
+          uri: lb://EVENTSERVICE
+          predicates:
+            - Path=/all
 
- application:
-   name: SWIGGY-GATEWAY
+        - id: event-service1
+          uri: lb://EVENTSERVICE
+          predicates:
+            - Path=/event/**
+          filters:
+            - AuthenticationFilter
+
+        - id: tag-service
+          uri: lb://TAGSERVICE
+          predicates:
+            - Path=/tag/**
+            - Path=/tag
+          filters:
+            - AuthenticationFilter
+
+        - id: identity-service
+          uri: lb://IDENTITY-SERVICE
+          predicates:
+            - Path=/auth/**
+
+application:
+  name: SWIGGY-GATEWAY
 
 eureka:
   client:

@@ -19,5 +19,6 @@ public class Event {
     private int maxPeopleCanTakePart;
     private Timestamp startTime;
     private Timestamp endTime;
+    private String imageUrl;
 
 }
