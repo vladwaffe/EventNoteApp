@@ -1,6 +1,7 @@
 package com.javatechie.service;
 
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -23,8 +24,9 @@ public class JwtService {
     }
 
 
-    public String generateToken(String userName) {
+    public String generateToken(String userName, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
         return createToken(claims, userName);
     }
 
@@ -40,5 +42,10 @@ public class JwtService {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String getRole(String token){
+        Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return claims.get("role", String.class);
     }
 }

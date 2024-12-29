@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class EventService {
             connectService.addTagList(event.getId(),eventDTO.getTags());
             eventDTO.setId(event.getId());
         } catch (Exception e) {
-            logger.error("Error in saveBook: ", e);
+            logger.error("Error in saveEvent: ", e);
             if (session != null) {
                 session.getTransaction().rollback();
             }
@@ -83,6 +84,7 @@ public class EventService {
             for (Event event : events) {
                 EventDTO eventDTO = EventMapper.INSTANCE.eventToEventDTO(event);
                 eventDTO.setTags(connectService.getTagList(eventDTO.getId()));
+                eventDTO.setId(event.getId());
                 eventDTOs.add(eventDTO);
             }
             return eventDTOs;
@@ -102,7 +104,7 @@ public class EventService {
             session = HibernateUtils.startSession();
             Event event = session.get(Event.class, id);
             if(event==null){
-                throw new EventNotFoundException("Ивент не найдена: " + id);
+                throw new EventNotFoundException("Ивент не найден: " + id);
             }
             else {
                 session.beginTransaction();
@@ -142,7 +144,7 @@ public class EventService {
                 return eventDTOs;
             }
         } catch (Exception e) {
-            logger.error("Error in findByIsbn: ", e);
+            logger.error("Error in findByTitle: ", e);
             return new ArrayList<>();
         } finally {
             if (session != null) {
@@ -151,12 +153,22 @@ public class EventService {
         }
     }
 
+    public EventDTO findByTitleAndStartTime(String title, Timestamp startTime){
+        List<EventDTO> eventDTOs = findByTitle(title);
+        for(EventDTO eventDTO : eventDTOs){
+            if(eventDTO.getStartTime().equals(startTime)){
+                return eventDTO;
+            }
+        }
+        return null;
+    }
+
 
     public EventDTO updateEvent(EventDTO eventDTO) {
         Session session = HibernateUtils.startSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.saveOrUpdate(EventMapper.INSTANCE.eventDTOToEvent(eventDTO));
+            session.update(EventMapper.INSTANCE.eventDTOToEvent(eventDTO));
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

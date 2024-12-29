@@ -20,16 +20,26 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")
+    @PostMapping("/register/user")
     public String addNewUser(@RequestBody UserCredential user) {
-        return service.saveUser(user);
+        user.setRole("USER");
+        service.saveUser(user);
+        return service.generateToken(user.getName(), "USER");
+    }
+
+    @PostMapping("/register/admin")
+    public String addNewAdmin(@RequestBody UserCredential user) {
+        user.setRole("ADMIN");
+        service.saveUser(user);
+        return service.generateToken(user.getName(), "ADMIN");
     }
 
     @PostMapping("/token")
     public String getToken(@RequestBody AuthRequest authRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
         if (authenticate.isAuthenticated()) {
-            return service.generateToken(authRequest.getUsername());
+            return service.generateToken(authRequest.getUsername(), service.getUser(authRequest.getUsername()));
         } else {
             throw new RuntimeException("invalid access");
         }
@@ -39,5 +49,10 @@ public class AuthController {
     public String validateToken(@RequestParam("token") String token) {
         service.validateToken(token);
         return "Token is valid";
+    }
+
+    @GetMapping("/role")
+    public String getRole(@RequestParam("token") String token){
+        return service.getRole(token);
     }
 }

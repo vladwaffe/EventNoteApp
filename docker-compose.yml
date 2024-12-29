@@ -71,6 +71,25 @@ services:
       - my_network
 
 
+  image-service:
+    build: ./ImageService
+    container_name: image-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db4:5432/Images
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SERVER_PORT=8084
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka2:8761/eureka/
+    depends_on:
+      db4:
+        condition: service_started
+      eureka2:
+        condition: service_healthy
+    networks:
+      - my_network
+
   eureka2:
     build: ./EurekaService
     container_name: eureka2
@@ -125,6 +144,17 @@ services:
     networks:
       - my_network
 
+  db4:
+    image: postgres:13
+    container_name: db4
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=Images
+    ports:
+      - "5436:5432"
+    networks:
+      - my_network
 
 networks:
   my_network:

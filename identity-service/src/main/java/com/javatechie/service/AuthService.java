@@ -2,9 +2,16 @@ package com.javatechie.service;
 
 import com.javatechie.entity.UserCredential;
 import com.javatechie.repository.UserCredentialRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.Key;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -22,13 +29,20 @@ public class AuthService {
         repository.save(credential);
         return "user added to the system";
     }
-
-    public String generateToken(String username) {
-        return jwtService.generateToken(username);
+    public String getUser(String name){
+        Optional<UserCredential> user = repository.findByName(name);
+        return user.get().getRole();
+    }
+    public String generateToken(String username, String role) {
+        return jwtService.generateToken(username, role);
     }
 
     public void validateToken(String token) {
         jwtService.validateToken(token);
+    }
+
+    public String getRole(String token){
+        return jwtService.getRole(token);
     }
 
 

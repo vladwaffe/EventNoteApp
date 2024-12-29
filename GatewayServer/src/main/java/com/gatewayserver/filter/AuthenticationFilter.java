@@ -24,7 +24,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             if (validator.isSecured.test(exchange.getRequest())) {
-                //header contains token or not
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new RuntimeException("missing authorization header");
                 }
@@ -34,17 +33,25 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 try {
-//                    //REST call to AUTH service
-//                    template.getForObject("http://IDENTITY-SERVICE//validate?token" + authHeader, String.class);
                     jwtUtil.validateToken(authHeader);
+
+                    String role = jwtUtil.extractRole(authHeader);
+                    if ("USER".equals(role) && !isUserAllowedToAccess(exchange.getRequest().getURI().getPath())) {
+                        throw new RuntimeException("Unauthorized access for user role");
+                    }
 
                 } catch (Exception e) {
                     System.out.println("invalid access...!");
-                    throw new RuntimeException("un authorized access to application");
+                    throw new RuntimeException("unauthorized access to application");
                 }
             }
             return chain.filter(exchange);
         });
+    }
+
+    private boolean isUserAllowedToAccess(String path) {
+
+        return "/workers/all".equals(path);
     }
 
     public static class Config {
